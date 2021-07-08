@@ -9,6 +9,11 @@ namespace Infrastructure.Repositories
 {
     public class ProductRepository : IProductRepository
     {
+        public Task<Product> GetProduct(int productId)
+        {
+            throw new NotImplementedException();
+        }
+
         public Task<IEnumerable<Product>> GetProducts()
         {
             throw new NotImplementedException();

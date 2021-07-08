@@ -24,7 +24,26 @@ namespace Infrastructure.Services
         #region Public Methods
         public async Task<IEnumerable<Product>> GetProducts()
         {
-            return await this._productRepository.GetProducts();
+            try
+            {
+                return await this._productRepository.GetProducts();
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+        }
+
+        public async Task<Product> GetProduct(int productId)
+        {
+            try
+            {
+                return await this._productRepository.GetProduct(productId);
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
         }
         #endregion
     }

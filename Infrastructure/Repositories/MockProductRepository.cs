@@ -2,6 +2,7 @@
 using Domain.Entities;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -32,7 +33,28 @@ namespace Infrastructure.Repositories
         #region Public Methods
         public async Task<IEnumerable<Product>> GetProducts()
         {
-            return await Task.FromResult(this._products);
+            try
+            {
+                return await Task.FromResult(this._products);
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+        }
+
+        public async Task<Product> GetProduct(int productId)
+        {
+            try
+            {
+                var product = await Task.FromResult(this._products.FirstOrDefault(p => p.Id == productId));
+
+                return product ?? new Product();
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
         }
         #endregion
     }
