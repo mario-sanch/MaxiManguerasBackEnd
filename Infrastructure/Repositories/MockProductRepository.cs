@@ -26,7 +26,7 @@ namespace Infrastructure.Repositories
         private void FillProducts(IList<Product> products)
         {
             products.Add(new Product { Id = 1, Name = "Product 1", Description = "Description product 1", Price = 10.15, ImageUrl = string.Empty });
-            products.Add(new Product { Id = 1, Name = "Product 2", Description = "Description product 2", Price = 12.19, ImageUrl = string.Empty });
+            products.Add(new Product { Id = 2, Name = "Product 2", Description = "Description product 2", Price = 12.19, ImageUrl = string.Empty });
         }
         #endregion
 
@@ -37,7 +37,7 @@ namespace Infrastructure.Repositories
             {
                 return await Task.FromResult(this._products);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 throw;
             }
@@ -51,7 +51,24 @@ namespace Infrastructure.Repositories
 
                 return product ?? new Product();
             }
-            catch (Exception ex)
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        public Task<Product> CreateProduct(Product product)
+        {
+            try
+            {
+                // add checks and tests ...
+
+                product.Id = this._products.Count() + 1;
+                this._products.Add(product);
+
+                return Task.FromResult(product);
+            }
+            catch (Exception)
             {
                 throw;
             }

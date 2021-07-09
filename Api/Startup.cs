@@ -32,6 +32,8 @@ namespace Api
             services.AddControllers(configure => {
                 configure.ReturnHttpNotAcceptable = true;
             }).AddXmlDataContractSerializerFormatters();
+            
+            services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
             services.AddTransient<IProductService, ProductService>();
             services.AddSingleton<IProductRepository, MockProductRepository>();

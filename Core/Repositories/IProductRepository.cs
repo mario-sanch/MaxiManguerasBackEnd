@@ -10,5 +10,6 @@ namespace Core.Repositories
     {
         Task<IEnumerable<Product>> GetProducts();
         Task<Product> GetProduct(int productId);
+        Task<Product> CreateProduct(Product product);
     }
 }

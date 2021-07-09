@@ -28,7 +28,7 @@ namespace Infrastructure.Services
             {
                 return await this._productRepository.GetProducts();
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 throw;
             }
@@ -40,7 +40,19 @@ namespace Infrastructure.Services
             {
                 return await this._productRepository.GetProduct(productId);
             }
-            catch (Exception ex)
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        public Task<Product> CreateProduct(Product product)
+        {
+            try
+            {
+                return  this._productRepository.CreateProduct(product);
+            }
+            catch (Exception)
             {
                 throw;
             }

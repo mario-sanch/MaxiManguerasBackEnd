@@ -1,4 +1,6 @@
-﻿using Core.Services;
+﻿using Api.Models;
+using AutoMapper;
+using Core.Services;
 using Domain.Entities;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -15,23 +17,26 @@ namespace Api.Controllers
     {
         #region Fields
         private IProductService _productService;
+        private IMapper _mapper;
         #endregion
 
         #region Constructors
-        public ProductsController(IProductService productService)
+        public ProductsController(IProductService productService, IMapper mapper)
         {
             this._productService = productService ?? throw new ArgumentNullException(nameof(productService));
+            this._mapper = mapper ?? throw new ArgumentException(nameof(mapper));
         }
         #endregion
 
         #region Methods
         [HttpGet()]
-        public async Task<IActionResult> GetProducts()
+        public async Task<ActionResult<IEnumerable<ProductDto>>> GetProducts(string category)
         {
             try
             {
                 var products = await this._productService.GetProducts();
-                return Ok(products);
+                var prodsDto = this._mapper.Map<IEnumerable<ProductDto>>(products);
+                return Ok(prodsDto);
             }
             catch (Exception ex)
             {
@@ -39,8 +44,8 @@ namespace Api.Controllers
             }
         }
 
-        [HttpGet("{productId:int}")]
-        public async Task<IActionResult> GetProduct(int productId)
+        [HttpGet("{productId:int}", Name = "GetProduct")]
+        public async Task<ActionResult<ProductDto>> GetProduct(int productId)
         {
             try
             {
@@ -48,9 +53,26 @@ namespace Api.Controllers
 
                 if (product == null || product.Id < 1) return NotFound();
 
-                return Ok(product);
+                return Ok(this._mapper.Map<ProductDto>(product));
             }
-            catch (Exception ex)
+            catch (Exception)
+            {
+                return new StatusCodeResult(StatusCodes.Status500InternalServerError);
+            }
+        }
+
+        [HttpPost]
+        public async Task<ActionResult<ProductDto>> CreateProduct(ProductForCreationDto product)
+        {
+            try
+            {
+                var newProduct = this._mapper.Map<Product>(product);
+
+                newProduct = await this._productService.CreateProduct(newProduct);
+
+                return CreatedAtRoute("GetProduct", new { productId = newProduct.Id }, newProduct);
+            }
+            catch (Exception)
             {
                 return new StatusCodeResult(StatusCodes.Status500InternalServerError);
             }
