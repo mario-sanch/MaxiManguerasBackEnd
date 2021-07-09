@@ -43,7 +43,7 @@ namespace Api.Controllers
                 return new StatusCodeResult(StatusCodes.Status500InternalServerError);
             }
         }
-
+        
         [HttpGet("{productId:int}", Name = "GetProduct")]
         public async Task<ActionResult<ProductDto>> GetProduct(int productId)
         {
@@ -70,7 +70,49 @@ namespace Api.Controllers
 
                 newProduct = await this._productService.CreateProduct(newProduct);
 
-                return CreatedAtRoute("GetProduct", new { productId = newProduct.Id }, newProduct);
+                var productToReturn = this._mapper.Map<ProductDto>(newProduct);
+
+                return CreatedAtRoute("GetProduct", new { productId = productToReturn.Id }, productToReturn);
+            }
+            catch (Exception)
+            {
+                return new StatusCodeResult(StatusCodes.Status500InternalServerError);
+            }
+        }
+
+        [HttpPut("{productId:int}")]
+        public async Task<IActionResult> UpdateProduct(int productId, ProductForUpdateDto product)
+        {
+            try
+            {
+                var productFromDb = await this._productService.GetProduct(productId);
+
+                if (productFromDb == null || productFromDb.Id < 0) return NotFound();
+
+                this._mapper.Map(product, productFromDb);
+
+                await this._productService.UpdateProduct(productFromDb);
+
+                return NoContent();
+            }
+            catch (Exception)
+            {
+                return new StatusCodeResult(StatusCodes.Status500InternalServerError);
+            }
+        }
+
+        [HttpDelete("{productId:int}")]
+        public async Task<IActionResult> DeleteProduct(int productId)
+        {
+            try
+            {
+                var prodToDelete = await this._productService.GetProduct(productId);
+
+                if (prodToDelete == null || prodToDelete.Id < 1) return NotFound();
+
+                await this._productService.DeleteProduct(prodToDelete);
+
+                return NoContent();
             }
             catch (Exception)
             {

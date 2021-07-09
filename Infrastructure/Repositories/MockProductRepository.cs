@@ -73,6 +73,30 @@ namespace Infrastructure.Repositories
                 throw;
             }
         }
+
+        public Task UpdateProduct(Product product)
+        {
+            // the reference to the object was already modified so no chenge need to be done here!
+
+            return Task.FromResult("");
+        }
+
+        public Task<Product> DeleteProduct(Product product)
+        {
+            try
+            {
+                var prodToDelete = this._products.FirstOrDefault(p => p.Id == product.Id);
+
+                if (prodToDelete != null) this._products.Remove(prodToDelete);
+
+                return Task.FromResult(prodToDelete);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
         #endregion
     }
 }

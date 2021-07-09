@@ -23,5 +23,15 @@ namespace Infrastructure.Repositories
         {
             throw new NotImplementedException();
         }
+
+        public Task UpdateProduct(Product product)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<Product> DeleteProduct(Product product)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

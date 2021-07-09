@@ -15,6 +15,8 @@ namespace Api.Profiles
             CreateMap<Product, ProductDto>();
 
             CreateMap<ProductForCreationDto, Product>();
+
+            CreateMap<ProductForUpdateDto, Product>();
         }
     }
 }

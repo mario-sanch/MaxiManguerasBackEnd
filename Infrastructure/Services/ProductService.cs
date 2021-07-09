@@ -57,6 +57,30 @@ namespace Infrastructure.Services
                 throw;
             }
         }
+
+        public Task UpdateProduct(Product product)
+        {
+            try
+            {
+                return this._productRepository.UpdateProduct(product);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        public Task<Product> DeleteProduct(Product product)
+        {
+            try
+            {
+                return this._productRepository.DeleteProduct(product);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
         #endregion
     }
 }
